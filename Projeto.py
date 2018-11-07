@@ -102,11 +102,10 @@ def printRocChart(tsY, pred):
 #roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
 
 #Carregamento e Processamento de dados
-dataset = pd.read_csv('bank.csv');
-
-X = dataset.iloc[:,:-1]
-Y = dataset['pep']
-
+X = aps_failure_test_set = pd.read_csv('aps_failure_test_set.csv');
+Y = aps_failure_training_set = pd.read_csv('aps_failure_training_set.csv');
+print(Y)
+preprocess_X = preprocessData(X)
 preprocess_X = preprocessData(X)
 
 #Separacao dos grupos de teste e treino

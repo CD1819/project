@@ -79,11 +79,6 @@ def printRocChart(tsY, pred):
     plt.xlabel('False Positive Rate')
     plt.show()
 
-
-# Compute micro-average ROC curve and ROC area
-#fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
-#roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
-
 #Carregamento e Processamento de dados
 dataset = pd.read_csv('bank.csv');
 

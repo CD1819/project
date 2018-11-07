@@ -13,29 +13,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import roc_curve, auc
 
 #Funcoes auxiliares
-def preprocessData(df):
-    label_encoder = LabelEncoder()
-    dummy_encoder = OneHotEncoder()
-    pdf = pd.DataFrame()
-    for att in df.columns:
-        if df[att].dtype == np.float64 or df[att].dtype == np.int64:
-            pdf = pd.concat([pdf, df[att]], axis=1)
-        else:
-            df[att] = label_encoder.fit_transform(df[att])
-            # Fitting One Hot Encoding on train data
-            temp = dummy_encoder.fit_transform(df[att].values.reshape(-1,1)).toarray()
-            # Changing encoded features into a dataframe with new column names
-            temp = pd.DataFrame(temp,
-                                columns=[(att + "_" + str(i)) for i in df[att].value_counts().index])
-            # In side by side concatenation index values should be same
-            # Setting the index values similar to the data frame
-            temp = temp.set_index(df.index.values)
-            # adding the new One Hot Encoded varibales to the dataframe
-            pdf = pd.concat([pdf, temp], axis=1)
-        print(att)
-    return pdf
-
-
 def accuracy(Confusion_Matrix):
     total = Confusion_Matrix[0][0] + Confusion_Matrix[0][1] + Confusion_Matrix[1][0] + Confusion_Matrix[1][1]
     tp_tn = Confusion_Matrix[0][0] + Confusion_Matrix[1][1]
@@ -97,22 +74,12 @@ def printRocChart(tsY, pred):
     plt.xlabel('False Positive Rate')
     plt.show()
 
-
-# Compute micro-average ROC curve and ROC area
-#fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
-#roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
-
 #Carregamento e Processamento de dados
 X = aps_failure_test_set = pd.read_csv('aps_failure_test_set.csv');
 Y = aps_failure_training_set = pd.read_csv('aps_failure_training_set.csv');
 
-preprocess_X = preprocessData(X)
-preprocess_Y = preprocessData(Y)
-
-preprocess_X.pd.to_csv('preprocess_test_set')
-preprocess_Y.pd.to_csv('preprocess_training_set')
 #Separacao dos grupos de teste e treino
-trX, tsX, trY, tsY = train_test_split(preprocess_X, preprocess_Y, train_size=0.7, stratify=Y)
+trX, tsX, trY, tsY = train_test_split(X, Y, train_size=0.7, stratify=Y)
 
 Binary_tsY = getTsYBinary(tsY)
 

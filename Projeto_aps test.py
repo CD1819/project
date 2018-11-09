@@ -73,16 +73,19 @@ def printRocChart(tsY, pred):
 
 #Carregamento e Processamento de dados
 X = aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv');
-Y = aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv');
+Y = aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', keep_default_na = False, na_values='na');
 
 #training_set is DataFrame
 training_set = balancingData(Y)
 
+training_set.fillna(0, inplace=True)
+
 
 #training_set['ab_000'].replace(0, np.nan)
 
+print
 print(training_set.head(30))
-print(training_set.describe())
+#print(training_set.describe())
 
 #Separacao dos grupos de teste e treino
 #trX, tsX, trY, tsY = train_test_split(X, Y, train_size=0.7, stratify=Y)

@@ -162,21 +162,30 @@ FP_rates = []
 TP_rates = []
 
 #Carregamento e Processamento de dados
-X = aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv');
-Y = aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv');
+aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv', na_values='na')
+aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', na_values='na')
 
 #training_set is DataFrame
-training_set = balancingData(Y)
+training_set = balancingData(aps_failure_training_set)
+
+training_set = training_set.fillna(40)
+aps_failure_test_set = aps_failure_test_set.fillna(0)
+aps_failure_test_set['classes'] = aps_failure_test_set['classes'] = [1 if line=='neg' else 0 for line in aps_failure_test_set.classes]
+
+tsY = aps_failure_test_set['classes']
+tsX = aps_failure_test_set.loc[:, aps_failure_test_set.columns != 'classes']
+trY = training_set['classes']
+trX = training_set.loc[:, aps_failure_training_set.columns != 'classes']
 
 
 #training_set['ab_000'].replace(0, np.nan)
 
-print(training_set.head(30))
-print(training_set.describe())
+print
+print(aps_failure_test_set.head(30))
+#print(training_set.describe())
 
 #Separacao dos grupos de teste e treino
 #trX, tsX, trY, tsY = train_test_split(X, Y, train_size=0.7, stratify=Y)
-#A informacao já vem separada em set de treino e de teste
 
 #Funcoes de aprendizagem
 

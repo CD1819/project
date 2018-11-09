@@ -14,7 +14,7 @@ from sklearn.metrics import roc_curve, auc
 from sklearn.utils import resample
 
 #Funcoes auxiliares
-#Data -> Information | Group -> Class | name -> Name of the most proiminent type of the class
+#Data -> Information
 def balancingData(data):
     data['classes'] = [0 if line=='neg' else 1 for line in data.classes]
     #class neg is the predominant one
@@ -31,23 +31,23 @@ def balancingData(data):
 #Filling missing values
 def changeNaNvalues(data, value):
     training = data
-    if(value == 0)
+    if(value == 0):
         for column in training:
             training[column].fillna(0, inplace=True)
         return training
-    elif(value == 'max')
+    elif(value == 'max'):
         for column in training:
             training[column].fillna(training[column].max(), inplace=True)
         return training
-    elif(value == 'min')
+    elif(value == 'min'):
         for column in training:
             training[column].fillna(training[column].min(), inplace=True)
         return training
-    elif(value == 'mean')
+    elif(value == 'mean'):
         for column in training:
             training[column].fillna(training[column].mean(), inplace=True)
         return training
-    elif(value == 'interpolate')
+    elif(value == 'interpolate'):
         for column in training:
             training[column].fillna(training[column].interpolate(), inplace=True)
         return training
@@ -116,7 +116,7 @@ def printMeasures(Confusion_Matrix):
 #Funcoes de aprendizagem
 
 #-----K-nearest neighbors (Instance-based Learning)-----
-def KNNClassifier():
+def KNNClassifier(trX, trY, tsX, tsY):
     knn = KNeighborsClassifier(n_neighbors=5)
 
     model_KNN = knn.fit(trX, trY)
@@ -131,7 +131,7 @@ def KNNClassifier():
     return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
 
 #-----Naive Bayes-----
-def GNBClassifier():
+def GNBClassifier(trX, trY, tsX, tsY):
     clf = GaussianNB()
 
     model_GNB = clf.fit(trX, trY)
@@ -147,7 +147,7 @@ def GNBClassifier():
 
 #-----CART (Decision Trees)-----
 
-def CARTClassifier():
+def CARTClassifier(trX, trY, tsX, tsY):
     cart = DecisionTreeClassifier()
 
     model_CART = cart.fit(trX, trY)
@@ -162,8 +162,7 @@ def CARTClassifier():
     return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
 
 #-----Random Forest-----
-    
-def RFClassifier():
+def RFClassifier(trX, trY, tsX, tsY):
     rf = RandomForestClassifier()
 
     model_RF = rf.fit(trX, trY)
@@ -176,24 +175,8 @@ def RFClassifier():
     printRocChart(tsY,predY_RF)
     
     return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
-    
-
-accuracies = []
-error_rates = []
-precisions = []
-specificities = []
-FP_rates = []
-TP_rates = []
 
 #Carregamento e Processamento de dados
-<<<<<<< HEAD
-X = aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv');
-Y = aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', na_values='na');
-
-#training_set is DataFrame
-training_set_inicial = balancingData(Y)
-
-=======
 aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv', na_values='na')
 aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', na_values='na')
 
@@ -208,31 +191,23 @@ tsY = aps_failure_test_set['classes']
 tsX = aps_failure_test_set.loc[:, aps_failure_test_set.columns != 'classes']
 trY = training_set['classes']
 trX = training_set.loc[:, aps_failure_training_set.columns != 'classes']
->>>>>>> db2caabf9b96ebfd54596d06bcbd548956b21253
 
-training_set_0 = changeNaNvalues(training_set_inicial, 0)
-training_set_min = changeNaNvalues(training_set_inicial, 'min')
-training_set_max = changeNaNvalues(training_set_inicial, 'max')
-training_set_mean = changeNaNvalues(training_set_inicial, 'mean')
-training_set_interpolate = changeNaNvalues(training_set_inicial, 'interpolate')
-
-<<<<<<< HEAD
-print(training_set.head(10))
-print(training_set.describe())
-=======
-#training_set['ab_000'].replace(0, np.nan)
-
-print
-print(aps_failure_test_set.head(30))
-#print(training_set.describe())
-
-#Separacao dos grupos de teste e treino
-#trX, tsX, trY, tsY = train_test_split(X, Y, train_size=0.7, stratify=Y)
->>>>>>> db2caabf9b96ebfd54596d06bcbd548956b21253
+trX_0 = changeNaNvalues(trX, 0)
+#trX_min = changeNaNvalues(trX, 'min')
+#trX_max = changeNaNvalues(trX, 'max')
+#trX_mean = changeNaNvalues(trX, 'mean')
+#trX_interpolate = changeNaNvalues(trX, 'interpolate')
 
 #Funcoes de aprendizagem
+accuracies = []
+error_rates = []
+precisions = []
+specificities = []
+FP_rates = []
+TP_rates = []
+
 #-----K-nearest neighbors (Instance-based Learning)-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier()
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier(trX_0, trY, tsX, tsY)
 accuracies.append(accuracy_measure)
 error_rates.append(error_rate_measure)
 precisions.append(precision_measure)
@@ -241,7 +216,7 @@ FP_rates.append(FP_rate_measure)
 TP_rates.append(TP_rate_measure)
 
 #-----Naive Bayes-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = GNBClassifier()
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = GNBClassifier(trX_0, trY, tsX, tsY)
 accuracies.append(accuracy_measure)
 error_rates.append(error_rate_measure)
 precisions.append(precision_measure)
@@ -251,7 +226,7 @@ TP_rates.append(TP_rate_measure)
 
 
 #-----CART (Decision Trees)-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier()
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_0, trY, tsX, tsY)
 accuracies.append(accuracy_measure)
 error_rates.append(error_rate_measure)
 precisions.append(precision_measure)
@@ -260,10 +235,12 @@ FP_rates.append(FP_rate_measure)
 TP_rates.append(TP_rate_measure)
 
 #-----Random Forest-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = RFClassifier()
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = RFClassifier(trX_0, trY, tsX, tsY)
 accuracies.append(accuracy_measure)
 error_rates.append(error_rate_measure)
 precisions.append(precision_measure)
 specificities.append(specificity_measure)
 FP_rates.append(FP_rate_measure)
 TP_rates.append(TP_rate_measure)
+
+

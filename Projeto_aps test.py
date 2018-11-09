@@ -16,7 +16,7 @@ from sklearn.utils import resample
 #Funcoes auxiliares
 #Data -> Information | Group -> Class | name -> Name of the most proiminent type of the class
 def balancingData(data):
-    data['classes'] = [1 if line=='neg' else 0 for line in data.classes]
+    data['classes'] = [0 if line=='neg' else 1 for line in data.classes]
     #class neg is the predominant one
     df_majority = data[data.classes==1]
     df_minority = data[data.classes==0]
@@ -80,7 +80,7 @@ training_set = balancingData(aps_failure_training_set)
 
 training_set = training_set.fillna(40)
 aps_failure_test_set = aps_failure_test_set.fillna(0)
-aps_failure_test_set['classes'] = aps_failure_test_set['classes'] = [1 if line=='neg' else 0 for line in aps_failure_test_set.classes]
+aps_failure_test_set['classes'] = aps_failure_test_set['classes'] = [0 if line=='neg' else 1 for line in aps_failure_test_set.classes]
 
 tsY = aps_failure_test_set['classes']
 tsX = aps_failure_test_set.loc[:, aps_failure_test_set.columns != 'classes']

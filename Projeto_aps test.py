@@ -27,7 +27,31 @@ def balancingData(data):
     
     balancedset =  pd.concat([df_majority, df_minority_resampled])
     return balancedset
-    
+
+#Filling missing values
+def changeNaNvalues(data, value):
+    training = data
+    if(value == 0)
+        for column in training:
+            training[column].fillna(0, inplace=True)
+        return training
+    elif(value == 'max')
+        for column in training:
+            training[column].fillna(training[column].max(), inplace=True)
+        return training
+    elif(value == 'min')
+        for column in training:
+            training[column].fillna(training[column].min(), inplace=True)
+        return training
+    elif(value == 'mean')
+        for column in training:
+            training[column].fillna(training[column].mean(), inplace=True)
+        return training
+    elif(value == 'interpolate')
+        for column in training:
+            training[column].fillna(training[column].interpolate(), inplace=True)
+        return training
+
 def accuracy(Confusion_Matrix):
     total = Confusion_Matrix[0][0] + Confusion_Matrix[0][1] + Confusion_Matrix[1][0] + Confusion_Matrix[1][1]
     tp_tn = Confusion_Matrix[0][0] + Confusion_Matrix[1][1]
@@ -73,26 +97,22 @@ def printRocChart(tsY, pred):
 
 #Carregamento e Processamento de dados
 X = aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv');
-Y = aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', keep_default_na = False, na_values='na');
+Y = aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', na_values='na');
 
 #training_set is DataFrame
-training_set = balancingData(Y)
-
-training_set.fillna(0, inplace=True)
+training_set_inicial = balancingData(Y)
 
 
-#training_set['ab_000'].replace(0, np.nan)
+training_set_0 = changeNaNvalues(training_set_inicial, 0)
+training_set_min = changeNaNvalues(training_set_inicial, 'min')
+training_set_max = changeNaNvalues(training_set_inicial, 'max')
+training_set_mean = changeNaNvalues(training_set_inicial, 'mean')
+training_set_interpolate = changeNaNvalues(training_set_inicial, 'interpolate')
 
-print
-print(training_set.head(30))
-#print(training_set.describe())
-
-#Separacao dos grupos de teste e treino
-#trX, tsX, trY, tsY = train_test_split(X, Y, train_size=0.7, stratify=Y)
-#A informacao já vem separada em set de treino e de teste
+print(training_set.head(10))
+print(training_set.describe())
 
 #Funcoes de aprendizagem
-
 #-----K-nearest neighbors (Instance-based Learning)-----
 knn = KNeighborsClassifier(n_neighbors=5)
 

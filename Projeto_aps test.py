@@ -192,11 +192,11 @@ tsX = aps_failure_test_set.loc[:, aps_failure_test_set.columns != 'classes']
 trY = training_set['classes']
 trX = training_set.loc[:, aps_failure_training_set.columns != 'classes']
 
-trX_0 = changeNaNvalues(trX, 0)
+#trX_0 = changeNaNvalues(trX, 0)
 #trX_min = changeNaNvalues(trX, 'min')
 #trX_max = changeNaNvalues(trX, 'max')
 #trX_mean = changeNaNvalues(trX, 'mean')
-#trX_interpolate = changeNaNvalues(trX, 'interpolate')
+trX_interpolate = changeNaNvalues(trX, 'interpolate')
 
 #Funcoes de aprendizagem
 accuracies = []
@@ -207,7 +207,7 @@ FP_rates = []
 TP_rates = []
 
 #-----K-nearest neighbors (Instance-based Learning)-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier(trX_0, trY, tsX, tsY)
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier(trX_interpolate, trY, tsX, tsY)
 accuracies.append(accuracy_measure)
 error_rates.append(error_rate_measure)
 precisions.append(precision_measure)
@@ -216,7 +216,7 @@ FP_rates.append(FP_rate_measure)
 TP_rates.append(TP_rate_measure)
 
 #-----Naive Bayes-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = GNBClassifier(trX_0, trY, tsX, tsY)
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = GNBClassifier(trX_interpolate, trY, tsX, tsY)
 accuracies.append(accuracy_measure)
 error_rates.append(error_rate_measure)
 precisions.append(precision_measure)
@@ -226,7 +226,7 @@ TP_rates.append(TP_rate_measure)
 
 
 #-----CART (Decision Trees)-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_0, trY, tsX, tsY)
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_interpolate, trY, tsX, tsY)
 accuracies.append(accuracy_measure)
 error_rates.append(error_rate_measure)
 precisions.append(precision_measure)
@@ -235,7 +235,7 @@ FP_rates.append(FP_rate_measure)
 TP_rates.append(TP_rate_measure)
 
 #-----Random Forest-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = RFClassifier(trX_0, trY, tsX, tsY)
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = RFClassifier(trX_interpolate, trY, tsX, tsY)
 accuracies.append(accuracy_measure)
 error_rates.append(error_rate_measure)
 precisions.append(precision_measure)

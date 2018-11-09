@@ -16,7 +16,7 @@ from sklearn.utils import resample
 #Funcoes auxiliares
 #Data -> Information | Group -> Class | name -> Name of the most proiminent type of the class
 def balancingData(data):
-    data['classes'] = [1 if line=='neg' else 0 for line in data.classes]
+    data['classes'] = [0 if line=='neg' else 1 for line in data.classes]
     #class neg is the predominant one
     df_majority = data[data.classes==1]
     df_minority = data[data.classes==0]
@@ -95,13 +95,120 @@ def printRocChart(tsY, pred):
     plt.xlabel('False Positive Rate')
     plt.show()
 
+def printMeasures(Confusion_Matrix):
+    accuracy_measure = accuracy(Confusion_Matrix)
+    error_rate_measure = error_rate(Confusion_Matrix)
+    precision_measure = precision(Confusion_Matrix)
+    specificity_measure = specificity(Confusion_Matrix)
+    FP_rate_measure = f_p_rate(Confusion_Matrix)
+    TP_rate_measure = t_p_rate(Confusion_Matrix)
+    print("Confusion matrix:\n", Confusion_Matrix)
+    print("Accuracy:", accuracy_measure)
+    print("Error rate:", error_rate_measure)
+    print("Precision:", precision_measure)
+    print("Specifity:", specificity_measure )
+    print("FP rate:", FP_rate_measure)
+    print("TP rate:", TP_rate_measure, "\n")
+    
+    return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure 
+
+
+#Funcoes de aprendizagem
+
+#-----K-nearest neighbors (Instance-based Learning)-----
+def KNNClassifier():
+    knn = KNeighborsClassifier(n_neighbors=5)
+
+    model_KNN = knn.fit(trX, trY)
+    predY_KNN = model_KNN.predict(tsX)
+    cnf_matrix_KNN = confusion_matrix(tsY, predY_KNN)
+
+    print("KNN Results:")
+    accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = printMeasures(cnf_matrix_KNN)
+    
+    printRocChart(tsY,predY_KNN)
+    
+    return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
+
+#-----Naive Bayes-----
+def GNBClassifier():
+    clf = GaussianNB()
+
+    model_GNB = clf.fit(trX, trY)
+    predY_GNB = model_GNB.predict(tsX)
+    cnf_matrix_GNB = confusion_matrix(tsY, predY_GNB)
+    
+    print("Naive Bayes Results:")
+    accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = printMeasures(cnf_matrix_GNB)
+    
+    printRocChart(tsY,predY_GNB)
+    
+    return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
+
+#-----CART (Decision Trees)-----
+
+def CARTClassifier():
+    cart = DecisionTreeClassifier()
+
+    model_CART = cart.fit(trX, trY)
+    predY_CART = model_CART.predict(tsX)
+    cnf_matrix_CART = confusion_matrix(tsY, predY_CART)
+    
+    print("CART Results:")
+    accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = printMeasures(cnf_matrix_CART)
+    
+    printRocChart(tsY,predY_CART)
+    
+    return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
+
+#-----Random Forest-----
+    
+def RFClassifier():
+    rf = RandomForestClassifier()
+
+    model_RF = rf.fit(trX, trY)
+    predY_RF = model_RF.predict(tsX)
+    cnf_matrix_RF = confusion_matrix(tsY, predY_RF)
+    
+    print("Random Forest Results:")
+    accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = printMeasures(cnf_matrix_RF)
+    
+    printRocChart(tsY,predY_RF)
+    
+    return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
+    
+
+accuracies = []
+error_rates = []
+precisions = []
+specificities = []
+FP_rates = []
+TP_rates = []
+
 #Carregamento e Processamento de dados
+<<<<<<< HEAD
 X = aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv');
 Y = aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', na_values='na');
 
 #training_set is DataFrame
 training_set_inicial = balancingData(Y)
 
+=======
+aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv', na_values='na')
+aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', na_values='na')
+
+#training_set is DataFrame
+training_set = balancingData(aps_failure_training_set)
+
+training_set = training_set.fillna(40)
+aps_failure_test_set = aps_failure_test_set.fillna(0)
+aps_failure_test_set['classes'] = aps_failure_test_set['classes'] = [0 if line=='neg' else 1 for line in aps_failure_test_set.classes]
+
+tsY = aps_failure_test_set['classes']
+tsX = aps_failure_test_set.loc[:, aps_failure_test_set.columns != 'classes']
+trY = training_set['classes']
+trX = training_set.loc[:, aps_failure_training_set.columns != 'classes']
+>>>>>>> db2caabf9b96ebfd54596d06bcbd548956b21253
 
 training_set_0 = changeNaNvalues(training_set_inicial, 0)
 training_set_min = changeNaNvalues(training_set_inicial, 'min')
@@ -109,75 +216,54 @@ training_set_max = changeNaNvalues(training_set_inicial, 'max')
 training_set_mean = changeNaNvalues(training_set_inicial, 'mean')
 training_set_interpolate = changeNaNvalues(training_set_inicial, 'interpolate')
 
+<<<<<<< HEAD
 print(training_set.head(10))
 print(training_set.describe())
+=======
+#training_set['ab_000'].replace(0, np.nan)
+
+print
+print(aps_failure_test_set.head(30))
+#print(training_set.describe())
+
+#Separacao dos grupos de teste e treino
+#trX, tsX, trY, tsY = train_test_split(X, Y, train_size=0.7, stratify=Y)
+>>>>>>> db2caabf9b96ebfd54596d06bcbd548956b21253
 
 #Funcoes de aprendizagem
 #-----K-nearest neighbors (Instance-based Learning)-----
-knn = KNeighborsClassifier(n_neighbors=5)
-
-model_KNN = knn.fit(trX, trY)
-predY_KNN = model_KNN.predict(tsX)
-cnf_matrix_KNN = confusion_matrix(tsY, predY_KNN)
-
-print("KNN Results:")
-print("Confusion matrix:\n", cnf_matrix_KNN)
-print("Accuracy:", accuracy(cnf_matrix_KNN))
-print("Error rate:", error_rate(cnf_matrix_KNN))
-print("Precision:", precision(cnf_matrix_KNN))
-print("Specifity:", specificity(cnf_matrix_KNN))
-print("FP rate:", f_p_rate(cnf_matrix_KNN))
-print("TP rate:", t_p_rate(cnf_matrix_KNN), "\n")
-printRocChart(tsY,predY_KNN)
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier()
+accuracies.append(accuracy_measure)
+error_rates.append(error_rate_measure)
+precisions.append(precision_measure)
+specificities.append(specificity_measure)
+FP_rates.append(FP_rate_measure)
+TP_rates.append(TP_rate_measure)
 
 #-----Naive Bayes-----
-clf = GaussianNB()
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = GNBClassifier()
+accuracies.append(accuracy_measure)
+error_rates.append(error_rate_measure)
+precisions.append(precision_measure)
+specificities.append(specificity_measure)
+FP_rates.append(FP_rate_measure)
+TP_rates.append(TP_rate_measure)
 
-model_GNB = clf.fit(trX, trY)
-predY_GNB = model_GNB.predict(tsX)
-cnf_matrix_GNB = confusion_matrix(tsY, predY_GNB)
-
-print("Naive Bayes Results:")
-print("Confusion matrix:\n", cnf_matrix_GNB)
-print("Accuracy:", accuracy(cnf_matrix_GNB))
-print("Error rate:", error_rate(cnf_matrix_GNB))
-print("Precision:", precision(cnf_matrix_GNB))
-print("Specifity:", specificity(cnf_matrix_GNB))
-print("FP rate:", f_p_rate(cnf_matrix_GNB))
-print("TP rate:", t_p_rate(cnf_matrix_GNB), "\n")
-printRocChart(tsY,predY_GNB)
 
 #-----CART (Decision Trees)-----
-cart = DecisionTreeClassifier()
-
-model_CART = cart.fit(trX, trY)
-predY_CART = model_CART.predict(tsX)
-cnf_matrix_CART = confusion_matrix(tsY, predY_CART)
-
-print("CART Results:")
-print("Confusion matrix:\n",cnf_matrix_CART)
-print("Accuracy:", accuracy(cnf_matrix_CART))
-print("Error rate:", error_rate(cnf_matrix_CART))
-print("Precision:", precision(cnf_matrix_CART))
-print("Specifity:", specificity(cnf_matrix_CART))
-print("FP rate:", f_p_rate(cnf_matrix_CART))
-print("TP rate:", t_p_rate(cnf_matrix_CART), "\n")
-printRocChart(tsY,predY_CART)
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier()
+accuracies.append(accuracy_measure)
+error_rates.append(error_rate_measure)
+precisions.append(precision_measure)
+specificities.append(specificity_measure)
+FP_rates.append(FP_rate_measure)
+TP_rates.append(TP_rate_measure)
 
 #-----Random Forest-----
-rf = RandomForestClassifier()
-
-model_RF = rf.fit(trX, trY)
-predY_RF = model_RF.predict(tsX)
-cnf_matrix_RF = confusion_matrix(tsY, predY_RF)
-
-print("Random Forest Results:")
-print("Confusion matrix:\n", cnf_matrix_RF)
-print("Accuracy:", accuracy(cnf_matrix_RF))
-print("Error rate:", error_rate(cnf_matrix_RF))
-print("Precision:", precision(cnf_matrix_RF))
-print("Specifity:", specificity(cnf_matrix_RF))
-print("FP rate:", f_p_rate(cnf_matrix_RF))
-print("TP rate:", t_p_rate(cnf_matrix_RF), "\n")      
-printRocChart(tsY,predY_RF)
-
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = RFClassifier()
+accuracies.append(accuracy_measure)
+error_rates.append(error_rate_measure)
+precisions.append(precision_measure)
+specificities.append(specificity_measure)
+FP_rates.append(FP_rate_measure)
+TP_rates.append(TP_rate_measure)

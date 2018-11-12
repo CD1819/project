@@ -1,5 +1,49 @@
 ============================================ nan_value(0) ===============================================================
 
+KNN Results:
+Confusion matrix:
+ [[15425   200]
+ [   92   283]]
+Accuracy: 0.98175
+Error rate: 0.01825
+Precision: 0.9872
+Specifity: 0.7546666666666667
+FP rate: 0.4140786749482402
+TP rate: 0.9819837025719379 
+
+Naive Bayes Results:
+Confusion matrix:
+ [[15136   489]
+ [   36   339]]
+Accuracy: 0.9671875
+Error rate: 0.0328125
+Precision: 0.968704
+Specifity: 0.904
+FP rate: 0.5905797101449275
+TP rate: 0.9780936995153473 
+
+CART Results:
+Confusion matrix:
+ [[15532    93]
+ [  156   219]]
+Accuracy: 0.9844375
+Error rate: 0.0155625
+Precision: 0.994048
+Specifity: 0.584
+FP rate: 0.2980769230769231
+TP rate: 0.9860961208812139
+
+Random Forest Results:
+Confusion matrix:
+ [[15599    26]
+ [  148   227]]
+Accuracy: 0.989125
+Error rate: 0.010875
+Precision: 0.998336
+Specifity: 0.6053333333333333
+FP rate: 0.10276679841897234
+TP rate: 0.985656514596234 
+
 ============================================ nan_value(min) =============================================================
 
 ============================================ nan_value(max) =============================================================

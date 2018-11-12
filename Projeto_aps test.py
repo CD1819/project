@@ -147,7 +147,7 @@ def GNBClassifier(trX, trY, tsX, tsY):
 #-----CART (Decision Trees)-----
 
 def CARTClassifier(trX, trY, tsX, tsY, data):
-    cart = DecisionTreeClassifier(max_depth=4)
+    cart = DecisionTreeClassifier()
 
     model_CART = cart.fit(trX, trY)
     predY_CART = model_CART.predict(tsX)
@@ -200,8 +200,8 @@ test_set = aps_failure_test_set.loc[:, aps_failure_test_set.columns != 'classes'
 trY = training_set['classes']
 training_set = training_set.loc[:, aps_failure_training_set.columns != 'classes']
 
-#trX = changeNaNvalues(training_set, 0)
-#tsX = changeNaNvalues(test_set, 0)
+trX = changeNaNvalues(training_set, 0)
+tsX = changeNaNvalues(test_set, 0)
 #trX = changeNaNvalues(training_set, 'min')
 #tsX = changeNaNvalues(test_set, 'min')
 #trX = changeNaNvalues(training_set, 'max')

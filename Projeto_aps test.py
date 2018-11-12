@@ -195,25 +195,26 @@ aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv', na_values
 aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', na_values='na')
 
 #training_set is DataFrame
-from collections import Counter
-print(Counter(aps_failure_training_set['classes']))
 training_set = balancingData(aps_failure_training_set)
 
-training_set = training_set.fillna(40)
-print(training_set)
-aps_failure_test_set = aps_failure_test_set.fillna(0)
+
+#training_set = changeNaNvalues(training_set, 0)
+#aps_failure_test_set = changeNaNvalues(aps_failure_test_set, 0)
+#training_set = changeNaNvalues(training_set, 'min')
+#aps_failure_test_set = changeNaNvalues(aps_failure_test_set, 'min')
+#training_set = changeNaNvalues(training_set, 'max')
+#aps_failure_test_set = changeNaNvalues(aps_failure_test_set, 'max')
+#training_set = changeNaNvalues(training_set, 'mean')
+#aps_failure_test_set = changeNaNvalues(aps_failure_test_set, 'mean')
+#training_set = changeNaNvalues(training_set, 'interpolate')
+#aps_failure_test_set = changeNaNvalues(aps_failure_test_set, 'interpolate')
+
 aps_failure_test_set['classes'] = aps_failure_test_set['classes'] = [0 if line=='neg' else 1 for line in aps_failure_test_set.classes]
 
 tsY = aps_failure_test_set['classes']
 tsX = aps_failure_test_set.loc[:, aps_failure_test_set.columns != 'classes']
 trY = training_set['classes']
 trX = training_set.loc[:, aps_failure_training_set.columns != 'classes']
-
-#trX_0 = changeNaNvalues(trX, 0)
-#trX_min = changeNaNvalues(trX, 'min')
-#trX_max = changeNaNvalues(trX, 'max')
-#trX_mean = changeNaNvalues(trX, 'mean')
-trX_interpolate = changeNaNvalues(trX, 'interpolate')
 
 #Funcoes de aprendizagem
 accuracies = []

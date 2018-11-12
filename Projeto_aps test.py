@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import graphviz 
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
@@ -9,6 +10,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import roc_curve, auc
 from sklearn.utils import resample
@@ -18,8 +20,8 @@ from sklearn.utils import resample
 def balancingData(data):
     data['classes'] = [0 if line=='neg' else 1 for line in data.classes]
     #class neg is the predominant one
-    df_majority = data[data.classes==1]
-    df_minority = data[data.classes==0]
+    df_majority = data[data.classes==0]
+    df_minority = data[data.classes==1]
     
     number_samples = len(df_majority)
     
@@ -147,8 +149,8 @@ def GNBClassifier(trX, trY, tsX, tsY):
 
 #-----CART (Decision Trees)-----
 
-def CARTClassifier(trX, trY, tsX, tsY):
-    cart = DecisionTreeClassifier()
+def CARTClassifier(trX, trY, tsX, tsY, data):
+    cart = DecisionTreeClassifier(max_depth=4)
 
     model_CART = cart.fit(trX, trY)
     predY_CART = model_CART.predict(tsX)
@@ -158,6 +160,10 @@ def CARTClassifier(trX, trY, tsX, tsY):
     accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = printMeasures(cnf_matrix_CART)
     
     printRocChart(tsY,predY_CART)
+    dot_data = tree.export_graphviz(model_CART, out_file=None,  feature_names=data.axes[1][1:],  
+    class_names=data.axes[1][0],  filled=True, rounded=True, special_characters=True) 
+    graph = graphviz.Source(dot_data)  
+    graph.render('dtree_render',view=True) 
     
     return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
 
@@ -176,14 +182,25 @@ def RFClassifier(trX, trY, tsX, tsY):
     
     return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
 
+
+
+
+
+#================================== MAIN CODE ================================================
+
+
+
 #Carregamento e Processamento de dados
 aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv', na_values='na')
 aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', na_values='na')
 
 #training_set is DataFrame
+from collections import Counter
+print(Counter(aps_failure_training_set['classes']))
 training_set = balancingData(aps_failure_training_set)
 
 training_set = training_set.fillna(40)
+print(training_set)
 aps_failure_test_set = aps_failure_test_set.fillna(0)
 aps_failure_test_set['classes'] = aps_failure_test_set['classes'] = [0 if line=='neg' else 1 for line in aps_failure_test_set.classes]
 
@@ -224,9 +241,8 @@ specificities.append(specificity_measure)
 FP_rates.append(FP_rate_measure)
 TP_rates.append(TP_rate_measure)
 
-
 #-----CART (Decision Trees)-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_0, trY, tsX, tsY)
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_0, trY, tsX, tsY, aps_failure_test_set)
 accuracies.append(accuracy_measure)
 error_rates.append(error_rate_measure)
 precisions.append(precision_measure)

@@ -46,6 +46,50 @@ TP rate: 0.985656514596234
 
 ============================================ nan_value(min) =============================================================
 
+KNN Results:
+Confusion matrix:
+ [[15425   200]
+ [   92   283]]
+Accuracy: 0.98175
+Error rate: 0.01825
+Precision: 0.9872
+Specifity: 0.7546666666666667
+FP rate: 0.4140786749482402
+TP rate: 0.9819837025719379 
+
+Naive Bayes Results:
+Confusion matrix:
+ [[15136   489]
+ [   36   339]]
+Accuracy: 0.9671875
+Error rate: 0.0328125
+Precision: 0.968704
+Specifity: 0.904
+FP rate: 0.5905797101449275
+TP rate: 0.9780936995153473
+
+CART Results:
+Confusion matrix:
+ [[15543    82]
+ [  156   219]]
+Accuracy: 0.985125
+Error rate: 0.014875
+Precision: 0.994752
+Specifity: 0.584
+FP rate: 0.2724252491694352
+TP rate: 0.9861058241339932
+
+Random Forest Results:
+Confusion matrix:
+ [[15593    32]
+ [  136   239]]
+Accuracy: 0.9895
+Error rate: 0.0105
+Precision: 0.997952
+Specifity: 0.6373333333333333
+FP rate: 0.11808118081180811
+TP rate: 0.9849039919151087 
+
 ============================================ nan_value(max) =============================================================
 
 ============================================ nan_value(mean) ============================================================

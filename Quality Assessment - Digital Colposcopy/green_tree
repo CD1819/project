@@ -1,0 +1,21 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname=helvetica] ;
+edge [fontname=helvetica] ;
+0 [label=<experts::2 &le; 0.5<br/>gini = 0.5<br/>samples = 92<br/>value = [46, 46]<br/>class = c>, fillcolor="#e5813900"] ;
+1 [label=<experts::1 &le; 0.5<br/>gini = 0.311<br/>samples = 57<br/>value = [46, 11]<br/>class = c>, fillcolor="#e58139c2"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label=<rgb_cervix_b_mean_minus_std &le; 30.952<br/>gini = 0.085<br/>samples = 45<br/>value = [43, 2]<br/>class = c>, fillcolor="#e58139f3"] ;
+1 -> 2 ;
+3 [label=<gini = 0.0<br/>samples = 43<br/>value = [43, 0]<br/>class = c>, fillcolor="#e58139ff"] ;
+2 -> 3 ;
+4 [label=<gini = 0.0<br/>samples = 2<br/>value = [0, 2]<br/>class = e>, fillcolor="#399de5ff"] ;
+2 -> 4 ;
+5 [label=<rgb_cervix_g_std &le; 11.755<br/>gini = 0.375<br/>samples = 12<br/>value = [3, 9]<br/>class = e>, fillcolor="#399de5aa"] ;
+1 -> 5 ;
+6 [label=<gini = 0.0<br/>samples = 3<br/>value = [3, 0]<br/>class = c>, fillcolor="#e58139ff"] ;
+5 -> 6 ;
+7 [label=<gini = 0.0<br/>samples = 9<br/>value = [0, 9]<br/>class = e>, fillcolor="#399de5ff"] ;
+5 -> 7 ;
+8 [label=<gini = 0.0<br/>samples = 35<br/>value = [0, 35]<br/>class = e>, fillcolor="#399de5ff"] ;
+0 -> 8 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+}

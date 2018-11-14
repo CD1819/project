@@ -14,6 +14,7 @@ from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import roc_curve, auc
 from sklearn.utils import resample
+import graphviz
 
 
 #Funcoes auxiliares
@@ -153,7 +154,7 @@ def GNBClassifier(trX, trY, tsX, tsY):
 
 #-----CART (Decision Trees)-----
 
-def CARTClassifier(trX, trY, tsX, tsY, data):
+def CARTClassifier(trX, trY, tsX, tsY, data, data_name):
     cart = DecisionTreeClassifier()
 
     model_CART = cart.fit(trX, trY)
@@ -167,7 +168,7 @@ def CARTClassifier(trX, trY, tsX, tsY, data):
     #dot_data = tree.export_graphviz(model_CART, out_file=None,  feature_names=data.axes[1][1:],  
     #class_names=data.axes[1][0],  filled=True, rounded=True, special_characters=True) 
     #graph = graphviz.Source(dot_data)  
-    #graph.render('dtree_render',view=True) 
+    #graph.render(data_name,view=True) 
     
     return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
 
@@ -217,7 +218,7 @@ accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP
 
 
 #-----CART (Decision Trees)-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_green, trY_green, tsX_green, tsY_green, training_data_green)
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_green, trY_green, tsX_green, tsY_green, training_data_green,"green_tree")
 
 
 #-----Random Forest-----
@@ -244,7 +245,7 @@ accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP
 
 
 #-----CART (Decision Trees)-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_hinselmann, trY_hinselmann, tsX_hinselmann, tsY_hinselmann, training_data_hinselmann)
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_hinselmann, trY_hinselmann, tsX_hinselmann, tsY_hinselmann, training_data_hinselmann,"hinselmann_tree")
 
 
 #-----Random Forest-----
@@ -271,7 +272,7 @@ accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP
 
 
 #-----CART (Decision Trees)-----
-accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_schiller, trY_schiller, tsX_schiller, tsY_schiller, training_data_schiller)
+accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX_schiller, trY_schiller, tsX_schiller, tsY_schiller, training_data_schiller,"chiller_tree")
 
 
 #-----Random Forest-----

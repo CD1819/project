@@ -1,0 +1,44 @@
+
+KNN Results:
+Confusion matrix:
+ [[ 5  3]
+ [ 3 17]]
+Accuracy: 0.7857142857142857
+Error rate: 0.21428571428571427
+Precision: 0.625
+Specifity: 0.85
+FP rate: 0.15
+TP rate: 0.22727272727272727 
+
+Naive Bayes Results:
+Confusion matrix:
+ [[ 7  1]
+ [ 1 19]]
+Accuracy: 0.9285714285714286
+Error rate: 0.07142857142857142
+Precision: 0.875
+Specifity: 0.95
+FP rate: 0.05
+TP rate: 0.2692307692307692 
+
+CART Results:
+Confusion matrix:
+ [[ 8  0]
+ [ 3 17]]
+Accuracy: 0.8928571428571429
+Error rate: 0.10714285714285714
+Precision: 1.0
+Specifity: 0.85
+FP rate: 0.0
+TP rate: 0.32 
+
+Random Forest Results:
+Confusion matrix:
+ [[ 7  1]
+ [ 4 16]]
+Accuracy: 0.8214285714285714
+Error rate: 0.17857142857142858
+Precision: 0.875
+Specifity: 0.8
+FP rate: 0.058823529411764705
+TP rate: 0.30434782608695654 

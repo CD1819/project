@@ -14,6 +14,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import roc_curve, auc
 from sklearn.utils import resample
 from sklearn.cluster import KMeans
+import scipy.cluster.hierarchy as sch
+from sklearn.cluster import AgglomerativeClustering
 
 #Funcoes auxiliares
 #Data -> Information
@@ -201,6 +203,7 @@ test_set = aps_failure_test_set.loc[:, aps_failure_test_set.columns != 'classes'
 trY = training_set['classes']
 training_set = training_set.loc[:, aps_failure_training_set.columns != 'classes']
 
+
 #trX = changeNaNvalues(training_set, 0)
 #tsX = changeNaNvalues(test_set, 0)
 trX = changeNaNvalues(training_set, 'min')
@@ -212,11 +215,18 @@ tsX = changeNaNvalues(test_set, 'min')
 #trX = changeNaNvalues(training_set, 'interpolate')
 #tsX = changeNaNvalues(test_set, 'interpolate')
 
+#KMeans
 np.set_printoptions(threshold=np.nan)
 model = KMeans(n_clusters=170)
 model.fit(tsX)
 all_predictions = model.predict(tsX)
 print(all_predictions)
+
+# AgglomerativeClustering
+dendrogram = sch.dendrogram(sch.linkage(tsX, method='ward'))
+hc = AgglomerativeClustering(n_clusters=170, affinity = 'euclidean', linkage = 'ward')
+y_hc = hc.fit_predict(tsX)
+print(y_hc)
 
 #-----K-nearest neighbors (Instance-based Learning)-----
 #accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier(trX, trY, tsX, tsY)

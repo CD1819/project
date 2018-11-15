@@ -232,9 +232,6 @@ trX3 = changeNaNvalues(dataset, 'mean')
 #trX4 = changeNaNvalues(training_set, 'interpolate')
 #tsX = changeNaNvalues(test_set, 'interpolate')
 
-<<<<<<< HEAD
-
-
 res = list()
 n_cluster = range(2,20)
 for n in n_cluster:
@@ -262,6 +259,8 @@ for n in n_cluster:
 
 plt.plot(n_cluster, res, n_cluster, res1, n_cluster, res2, n_cluster, res3)
 plt.title('elbow curve')
+plt.xlabel('Number of Clusters')
+plt.ylabel('Euclidian distances')
 plt.show()
 
 #KMeans
@@ -279,23 +278,6 @@ plt.show()
 #y_hc = hc.fit_predict(tsX)
 #print(y_hc)
 
-=======
-# =============================================================================
-# #KMeans
-# np.set_printoptions(threshold=np.nan)
-# model = KMeans(n_clusters=170)
-# model.fit(tsX)
-# all_predictions = model.predict(tsX)
-# print(all_predictions)
-# 
-# # AgglomerativeClustering
-# dendrogram = sch.dendrogram(sch.linkage(tsX, method='ward'))
-# hc = AgglomerativeClustering(n_clusters=170, affinity = 'euclidean', linkage = 'ward')
-# y_hc = hc.fit_predict(tsX)
-# print(y_hc)
-# 
-# =============================================================================
->>>>>>> ee01460971b85d5473c7aaeaa73f4c67f847cfa8
 #-----K-nearest neighbors (Instance-based Learning)-----
 #accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier(trX, trY, tsX, tsY)
 
@@ -311,7 +293,3 @@ plt.show()
 
 #-----Random Forest-----
 #accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = RFClassifier(trX, trY, tsX, tsY)
-
-binary_relations = get_binary_relations(aps_failure_test_set)
-print(binary_relations)
-print(len(binary_relations))

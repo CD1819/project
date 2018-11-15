@@ -182,9 +182,24 @@ def RFClassifier(trX, trY, tsX, tsY):
     
     return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
 
-
-
-
+def get_binary_relations(data):
+    pairs = {}
+    ind = 1
+    for index, row in data.iterrows():
+        data_listed = list(data.columns.values)
+        size = len(data_listed)
+        for i in range(size):
+            j=i+1
+            while j < size:
+                aux = (row[data_listed[i]],row[data_listed[j]])
+                if(aux in pairs):
+                    pairs[aux] +=1
+                else:
+                    pairs[aux] = 1
+                j+=1
+        print(ind)
+        ind+=1
+    return pairs
 
 #================================== MAIN CODE ================================================
 
@@ -215,19 +230,21 @@ tsX = changeNaNvalues(test_set, 'min')
 #trX = changeNaNvalues(training_set, 'interpolate')
 #tsX = changeNaNvalues(test_set, 'interpolate')
 
-#KMeans
-np.set_printoptions(threshold=np.nan)
-model = KMeans(n_clusters=170)
-model.fit(tsX)
-all_predictions = model.predict(tsX)
-print(all_predictions)
-
-# AgglomerativeClustering
-dendrogram = sch.dendrogram(sch.linkage(tsX, method='ward'))
-hc = AgglomerativeClustering(n_clusters=170, affinity = 'euclidean', linkage = 'ward')
-y_hc = hc.fit_predict(tsX)
-print(y_hc)
-
+# =============================================================================
+# #KMeans
+# np.set_printoptions(threshold=np.nan)
+# model = KMeans(n_clusters=170)
+# model.fit(tsX)
+# all_predictions = model.predict(tsX)
+# print(all_predictions)
+# 
+# # AgglomerativeClustering
+# dendrogram = sch.dendrogram(sch.linkage(tsX, method='ward'))
+# hc = AgglomerativeClustering(n_clusters=170, affinity = 'euclidean', linkage = 'ward')
+# y_hc = hc.fit_predict(tsX)
+# print(y_hc)
+# 
+# =============================================================================
 #-----K-nearest neighbors (Instance-based Learning)-----
 #accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier(trX, trY, tsX, tsY)
 
@@ -243,3 +260,7 @@ print(y_hc)
 
 #-----Random Forest-----
 #accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = RFClassifier(trX, trY, tsX, tsY)
+
+binary_relations = get_binary_relations(aps_failure_test_set)
+print(binary_relations)
+print(len(binary_relations))

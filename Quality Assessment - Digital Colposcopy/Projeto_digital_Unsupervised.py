@@ -17,6 +17,7 @@ from sklearn.cluster import KMeans
 import scipy.cluster.hierarchy as sch
 from sklearn.cluster import AgglomerativeClustering
 from scipy.spatial.distance import cdist
+import matplotlib.patches as mpatches
 
 
 #Funcoes auxiliares
@@ -218,6 +219,8 @@ OBJECTIVE = 'consensus'
 
 #================================== GREEN ====================================================
 data_set_green = pd.read_csv('green.csv', na_values='na')
+data_set_hinselmann = pd.read_csv('hinselmann.csv', na_values='na')
+data_set_schiller = pd.read_csv('schiller.csv', na_values='na')
 
 #binary_relations = get_binary_relations(data_set_green)
 
@@ -228,16 +231,34 @@ for n in n_cluster:
     kmeans.fit(data_set_green)
     res.append(np.average(np.min(cdist(data_set_green, kmeans.cluster_centers_, 'euclidean'), axis=1)))
 
-plt.plot(n_cluster, res)
+res2 = list()
+n_cluster = range(2,20)
+for n in n_cluster:
+    kmeans = KMeans(n_clusters=n)
+    kmeans.fit(data_set_hinselmann)
+    res2.append(np.average(np.min(cdist(data_set_hinselmann, kmeans.cluster_centers_, 'euclidean'), axis=1)))
+
+res3 = list()
+n_cluster = range(2,20)
+for n in n_cluster:
+    kmeans = KMeans(n_clusters=n)
+    kmeans.fit(data_set_schiller)
+    res3.append(np.average(np.min(cdist(data_set_schiller, kmeans.cluster_centers_, 'euclidean'), axis=1)))
+
+green_patch = mpatches.Patch(color='green', label ='Green')
+red_patch = mpatches.Patch(color='red', label ='Hinselmann')
+blue_patch = mpatches.Patch(color='blue', label ='Schiller')
+plt.plot(n_cluster, res,'g', n_cluster, res2, 'r', n_cluster, res3, 'b')
 plt.title('elbow curve')
+plt.legend(handles=[green_patch, red_patch, blue_patch])
 plt.show()
 
  #KMeans
-np.set_printoptions(threshold=np.nan)
-model = KMeans(n_clusters=5)
-model.fit(data_set_green)
-all_predictions = model.predict(data_set_green)
-print(all_predictions)
+#np.set_printoptions(threshold=np.nan)
+#model = KMeans(n_clusters=5)
+#model.fit(data_set_green)
+#all_predictions = model.predict(data_set_green)
+#print(all_predictions)
  
 # # AgglomerativeClustering
 # dendrogram = sch.dendrogram(sch.linkage(tsX, method='ward'))

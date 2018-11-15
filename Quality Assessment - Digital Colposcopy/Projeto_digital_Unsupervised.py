@@ -218,13 +218,6 @@ OBJECTIVE = 'consensus'
 
 #================================== GREEN ====================================================
 data_set_green = pd.read_csv('green.csv', na_values='na')
-X_green = data_set_green.iloc[:,:-1]
-Y_green = data_set_green[OBJECTIVE]
-trX_green, tsX_green, trY_green, tsY_green = train_test_split(X_green, Y_green, train_size=0.7, stratify=Y_green)
-training_data_green = pd.concat([trX_green,trY_green],axis=1)
-training_data_green = balancingData(training_data_green,OBJECTIVE)
-trX_green = training_data_green.iloc[:,:-1]
-trY_green = training_data_green[OBJECTIVE]
 
 #binary_relations = get_binary_relations(data_set_green)
 

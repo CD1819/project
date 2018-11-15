@@ -16,21 +16,28 @@ from sklearn.utils import resample
 from sklearn.cluster import KMeans
 import scipy.cluster.hierarchy as sch
 from sklearn.cluster import AgglomerativeClustering
+from scipy.spatial.distance import cdist
+
 
 #Funcoes auxiliares
 #Data -> Information
-def balancingData(data):
-    data['classes'] = [0 if line=='neg' else 1 for line in data.classes]
-    #class neg is the predominant one
-    df_majority = data[data.classes==0]
-    df_minority = data[data.classes==1]
-    
+def balancingData(data,objective):
+    var = Counter(data[objective])
+    print(var)
+    if(var[1] > var[0]):
+        df_majority = data[data.consensus==1]
+        df_minority = data[data.consensus==0]
+    elif(var[0] > var[1]):
+        df_majority = data[data.consensus==1]
+        df_minority = data[data.consensus==0]
+    else:
+        return data
     number_samples = len(df_majority)
-    
     df_minority_resampled = resample(df_minority, replace = True, n_samples=number_samples)
-    
-    balancedset =  pd.concat([df_majority, df_minority_resampled])
-    return balancedset
+    balancedData =  pd.concat([df_majority, df_minority_resampled])
+    var = Counter(balancedData[objective])
+    print(var)
+    return balancedData
 
 #Filling missing values
 def changeNaNvalues(data, value):
@@ -149,7 +156,7 @@ def GNBClassifier(trX, trY, tsX, tsY):
 
 #-----CART (Decision Trees)-----
 
-def CARTClassifier(trX, trY, tsX, tsY, data):
+def CARTClassifier(trX, trY, tsX, tsY, data, data_name):
     cart = DecisionTreeClassifier()
 
     model_CART = cart.fit(trX, trY)
@@ -163,7 +170,7 @@ def CARTClassifier(trX, trY, tsX, tsY, data):
     #dot_data = tree.export_graphviz(model_CART, out_file=None,  feature_names=data.axes[1][1:],  
     #class_names=data.axes[1][0],  filled=True, rounded=True, special_characters=True) 
     #graph = graphviz.Source(dot_data)  
-    #graph.render('dtree_render',view=True) 
+    #graph.render(data_name,view=True) 
     
     return accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure
 
@@ -201,67 +208,47 @@ def get_binary_relations(data):
         ind+=1
     return pairs
 
+
+
 #================================== MAIN CODE ================================================
 
-
+OBJECTIVE = 'consensus'
 
 #Carregamento e Processamento de dados
-aps_failure_test_set = pd.read_csv('aps_failure_test_set_classes.csv', na_values='na')
-aps_failure_training_set = pd.read_csv('aps_failure_training_set_classes.csv', na_values='na')
 
-training_set = balancingData(aps_failure_training_set)
+#================================== GREEN ====================================================
+data_set_green = pd.read_csv('green.csv', na_values='na')
+X_green = data_set_green.iloc[:,:-1]
+Y_green = data_set_green[OBJECTIVE]
+trX_green, tsX_green, trY_green, tsY_green = train_test_split(X_green, Y_green, train_size=0.7, stratify=Y_green)
+training_data_green = pd.concat([trX_green,trY_green],axis=1)
+training_data_green = balancingData(training_data_green,OBJECTIVE)
+trX_green = training_data_green.iloc[:,:-1]
+trY_green = training_data_green[OBJECTIVE]
 
-aps_failure_test_set['classes'] = aps_failure_test_set['classes'] = [0 if line=='neg' else 1 for line in aps_failure_test_set.classes]
+#binary_relations = get_binary_relations(data_set_green)
 
-tsY = aps_failure_test_set['classes']
-test_set = aps_failure_test_set.loc[:, aps_failure_test_set.columns != 'classes']
-trY = training_set['classes']
-training_set = training_set.loc[:, aps_failure_training_set.columns != 'classes']
+res = list()
+n_cluster = range(2,20)
+for n in n_cluster:
+    kmeans = KMeans(n_clusters=n)
+    kmeans.fit(data_set_green)
+    res.append(np.average(np.min(cdist(data_set_green, kmeans.cluster_centers_, 'euclidean'), axis=1)))
 
+plt.plot(n_cluster, res)
+plt.title('elbow curve')
+plt.show()
 
-#trX = changeNaNvalues(training_set, 0)
-#tsX = changeNaNvalues(test_set, 0)
-trX = changeNaNvalues(training_set, 'min')
-tsX = changeNaNvalues(test_set, 'min')
-#trX = changeNaNvalues(training_set, 'max')
-#tsX = changeNaNvalues(test_set, 'max')
-#trX = changeNaNvalues(training_set, 'mean')
-#tsX = changeNaNvalues(test_set, 'mean')
-#trX = changeNaNvalues(training_set, 'interpolate')
-#tsX = changeNaNvalues(test_set, 'interpolate')
-
-# =============================================================================
-# #KMeans
-# np.set_printoptions(threshold=np.nan)
-# model = KMeans(n_clusters=170)
-# model.fit(tsX)
-# all_predictions = model.predict(tsX)
-# print(all_predictions)
-# 
+ #KMeans
+np.set_printoptions(threshold=np.nan)
+model = KMeans(n_clusters=5)
+model.fit(data_set_green)
+all_predictions = model.predict(data_set_green)
+print(all_predictions)
+ 
 # # AgglomerativeClustering
 # dendrogram = sch.dendrogram(sch.linkage(tsX, method='ward'))
 # hc = AgglomerativeClustering(n_clusters=170, affinity = 'euclidean', linkage = 'ward')
 # y_hc = hc.fit_predict(tsX)
 # print(y_hc)
 # 
-# =============================================================================
-#-----K-nearest neighbors (Instance-based Learning)-----
-#accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier(trX, trY, tsX, tsY)
-
-
-#-----Naive Bayes-----
-#accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = GNBClassifier(trX, trY, tsX, tsY)
-
-
-#-----CART (Decision Trees)-----
-
-#accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = CARTClassifier(trX, trY, tsX, tsY, aps_failure_test_set)
-
-
-#-----Random Forest-----
-#accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = RFClassifier(trX, trY, tsX, tsY)
-
-binary_relations = get_binary_relations(aps_failure_test_set)
-elements = count_elements()
-print(binary_relations)
-print(len(binary_relations))

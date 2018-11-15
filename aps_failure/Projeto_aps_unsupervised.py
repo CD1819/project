@@ -233,7 +233,6 @@ trX = changeNaNvalues(dataset, 0)
 #trX4 = changeNaNvalues(training_set, 'interpolate')
 #tsX = changeNaNvalues(test_set, 'interpolate')
 
-
 #KMeans
 np.set_printoptions(threshold=np.nan)
 model = KMeans(n_clusters=11)
@@ -262,7 +261,3 @@ all_predictions = model.predict(trX)
 
 #-----Random Forest-----
 #accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = RFClassifier(trX, trY, tsX, tsY)
-
-binary_relations = get_binary_relations(aps_failure_test_set)
-print(binary_relations)
-print(len(binary_relations))

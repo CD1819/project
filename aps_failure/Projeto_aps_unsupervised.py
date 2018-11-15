@@ -93,13 +93,12 @@ training_set = training_set.loc[:, aps_failure_training_set.columns != 'classes'
 
 dataset = pd.concat([training_set,test_set])
 
-#trX = changeNaNvalues(dataset, 0)
 #tsX = changeNaNvalues(test_set, 0)
 #trX1 = changeNaNvalues(dataset, 'min')
 #tsX = changeNaNvalues(test_set, 'min')
 #trX2 = changeNaNvalues(dataset, 'max')
 #tsX = changeNaNvalues(test_set, 'max')
-trX3 = changeNaNvalues(dataset, 'mean')
+#trX3 = changeNaNvalues(dataset, 'mean')
 #tsX = changeNaNvalues(test_set, 'mean')
 #trX4 = changeNaNvalues(training_set, 'interpolate')
 #tsX = changeNaNvalues(test_set, 'interpolate')
@@ -118,6 +117,3 @@ plt.legend()
 
 plt.show()
 #all_predictions = model.predict(trX)
-
-
-

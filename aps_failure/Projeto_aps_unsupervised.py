@@ -16,6 +16,7 @@ from sklearn.utils import resample
 from sklearn.cluster import KMeans
 import scipy.cluster.hierarchy as sch
 from sklearn.cluster import AgglomerativeClustering
+from scipy.spatial.distance import cdist
 
 #Funcoes auxiliares
 #Data -> Information
@@ -218,18 +219,67 @@ test_set = aps_failure_test_set.loc[:, aps_failure_test_set.columns != 'classes'
 trY = training_set['classes']
 training_set = training_set.loc[:, aps_failure_training_set.columns != 'classes']
 
+dataset = pd.concat([aps_failure_test_set,aps_failure_training_set])
 
-#trX = changeNaNvalues(training_set, 0)
+trX = changeNaNvalues(dataset, 0)
 #tsX = changeNaNvalues(test_set, 0)
-trX = changeNaNvalues(training_set, 'min')
-tsX = changeNaNvalues(test_set, 'min')
-#trX = changeNaNvalues(training_set, 'max')
+trX1 = changeNaNvalues(dataset, 'min')
+#tsX = changeNaNvalues(test_set, 'min')
+trX2 = changeNaNvalues(dataset, 'max')
 #tsX = changeNaNvalues(test_set, 'max')
-#trX = changeNaNvalues(training_set, 'mean')
+trX3 = changeNaNvalues(dataset, 'mean')
 #tsX = changeNaNvalues(test_set, 'mean')
-#trX = changeNaNvalues(training_set, 'interpolate')
+#trX4 = changeNaNvalues(training_set, 'interpolate')
 #tsX = changeNaNvalues(test_set, 'interpolate')
 
+<<<<<<< HEAD
+
+
+res = list()
+n_cluster = range(2,20)
+for n in n_cluster:
+    kmeans = KMeans(n_clusters=n)
+    kmeans.fit(trX)
+    res.append(np.average(np.min(cdist(trX, kmeans.cluster_centers_, 'euclidean'), axis=1)))
+res1 = list()
+n_cluster = range(2,20)
+for n in n_cluster:
+    kmeans = KMeans(n_clusters=n)
+    kmeans.fit(trX1)
+    res1.append(np.average(np.min(cdist(trX1, kmeans.cluster_centers_, 'euclidean'), axis=1)))
+res2 = list()
+n_cluster = range(2,20)
+for n in n_cluster:
+    kmeans = KMeans(n_clusters=n)
+    kmeans.fit(trX2)
+    res2.append(np.average(np.min(cdist(trX2, kmeans.cluster_centers_, 'euclidean'), axis=1)))
+res3 = list()
+n_cluster = range(2,20)
+for n in n_cluster:
+    kmeans = KMeans(n_clusters=n)
+    kmeans.fit(trX3)
+    res3.append(np.average(np.min(cdist(trX3, kmeans.cluster_centers_, 'euclidean'), axis=1)))
+
+plt.plot(n_cluster, res, n_cluster, res1, n_cluster, res2, n_cluster, res3)
+plt.title('elbow curve')
+plt.show()
+
+#KMeans
+#np.set_printoptions(threshold=np.nan)
+#model = KMeans(n_clusters=5)
+#model.fit(trX)
+#all_predictions = model.predict(trX)
+
+
+
+
+# AgglomerativeClustering
+#dendrogram = sch.dendrogram(sch.linkage(tsX, method='ward'))
+#hc = AgglomerativeClustering(n_clusters=170, affinity = 'euclidean', linkage = 'ward')
+#y_hc = hc.fit_predict(tsX)
+#print(y_hc)
+
+=======
 # =============================================================================
 # #KMeans
 # np.set_printoptions(threshold=np.nan)
@@ -245,6 +295,7 @@ tsX = changeNaNvalues(test_set, 'min')
 # print(y_hc)
 # 
 # =============================================================================
+>>>>>>> ee01460971b85d5473c7aaeaa73f4c67f847cfa8
 #-----K-nearest neighbors (Instance-based Learning)-----
 #accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier(trX, trY, tsX, tsY)
 

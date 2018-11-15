@@ -221,56 +221,24 @@ training_set = training_set.loc[:, aps_failure_training_set.columns != 'classes'
 
 dataset = pd.concat([aps_failure_test_set,aps_failure_training_set])
 
+
 trX = changeNaNvalues(dataset, 0)
 #tsX = changeNaNvalues(test_set, 0)
-trX1 = changeNaNvalues(dataset, 'min')
+#trX1 = changeNaNvalues(dataset, 'min')
 #tsX = changeNaNvalues(test_set, 'min')
-trX2 = changeNaNvalues(dataset, 'max')
+#trX2 = changeNaNvalues(dataset, 'max')
 #tsX = changeNaNvalues(test_set, 'max')
-trX3 = changeNaNvalues(dataset, 'mean')
+#trX3 = changeNaNvalues(dataset, 'mean')
 #tsX = changeNaNvalues(test_set, 'mean')
 #trX4 = changeNaNvalues(training_set, 'interpolate')
 #tsX = changeNaNvalues(test_set, 'interpolate')
 
-<<<<<<< HEAD
-
-
-res = list()
-n_cluster = range(2,20)
-for n in n_cluster:
-    kmeans = KMeans(n_clusters=n)
-    kmeans.fit(trX)
-    res.append(np.average(np.min(cdist(trX, kmeans.cluster_centers_, 'euclidean'), axis=1)))
-res1 = list()
-n_cluster = range(2,20)
-for n in n_cluster:
-    kmeans = KMeans(n_clusters=n)
-    kmeans.fit(trX1)
-    res1.append(np.average(np.min(cdist(trX1, kmeans.cluster_centers_, 'euclidean'), axis=1)))
-res2 = list()
-n_cluster = range(2,20)
-for n in n_cluster:
-    kmeans = KMeans(n_clusters=n)
-    kmeans.fit(trX2)
-    res2.append(np.average(np.min(cdist(trX2, kmeans.cluster_centers_, 'euclidean'), axis=1)))
-res3 = list()
-n_cluster = range(2,20)
-for n in n_cluster:
-    kmeans = KMeans(n_clusters=n)
-    kmeans.fit(trX3)
-    res3.append(np.average(np.min(cdist(trX3, kmeans.cluster_centers_, 'euclidean'), axis=1)))
-
-plt.plot(n_cluster, res, n_cluster, res1, n_cluster, res2, n_cluster, res3)
-plt.title('elbow curve')
-plt.show()
 
 #KMeans
-#np.set_printoptions(threshold=np.nan)
-#model = KMeans(n_clusters=5)
-#model.fit(trX)
-#all_predictions = model.predict(trX)
-
-
+np.set_printoptions(threshold=np.nan)
+model = KMeans(n_clusters=11)
+model.fit(trX)
+all_predictions = model.predict(trX)
 
 
 # AgglomerativeClustering
@@ -279,23 +247,6 @@ plt.show()
 #y_hc = hc.fit_predict(tsX)
 #print(y_hc)
 
-=======
-# =============================================================================
-# #KMeans
-# np.set_printoptions(threshold=np.nan)
-# model = KMeans(n_clusters=170)
-# model.fit(tsX)
-# all_predictions = model.predict(tsX)
-# print(all_predictions)
-# 
-# # AgglomerativeClustering
-# dendrogram = sch.dendrogram(sch.linkage(tsX, method='ward'))
-# hc = AgglomerativeClustering(n_clusters=170, affinity = 'euclidean', linkage = 'ward')
-# y_hc = hc.fit_predict(tsX)
-# print(y_hc)
-# 
-# =============================================================================
->>>>>>> ee01460971b85d5473c7aaeaa73f4c67f847cfa8
 #-----K-nearest neighbors (Instance-based Learning)-----
 #accuracy_measure, error_rate_measure, precision_measure, specificity_measure, FP_rate_measure, TP_rate_measure = KNNClassifier(trX, trY, tsX, tsY)
 

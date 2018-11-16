@@ -1,15 +1,10 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import graphviz
 from sklearn.naive_bayes import GaussianNB
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import roc_curve, auc
 from sklearn.utils import resample

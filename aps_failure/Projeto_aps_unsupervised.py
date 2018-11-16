@@ -1,25 +1,9 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.naive_bayes import GaussianNB
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import StratifiedKFold
-from sklearn.metrics import confusion_matrix
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn import tree
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import roc_curve, auc
 from sklearn.utils import resample
 from sklearn.cluster import KMeans
-import scipy.cluster.hierarchy as sch
-from sklearn.cluster import AgglomerativeClustering
-from scipy.spatial.distance import cdist
 
 #Funcoes auxiliares
-#Data -> Information
 def balancingData(data):
     data['classes'] = [0 if line=='neg' else 1 for line in data.classes]
     #class neg is the predominant one
@@ -54,7 +38,6 @@ def changeNaNvalues(data, value):
         return training
     elif(value == 'interpolate'):
         return training.interpolate(axis=0)
-
 def get_binary_relations(data):
     pairs = {}
     ind = 1
@@ -93,15 +76,8 @@ training_set = training_set.loc[:, aps_failure_training_set.columns != 'classes'
 
 dataset = pd.concat([training_set,test_set])
 
-#tsX = changeNaNvalues(test_set, 0)
-#trX1 = changeNaNvalues(dataset, 'min')
-#tsX = changeNaNvalues(test_set, 'min')
-#trX2 = changeNaNvalues(dataset, 'max')
-#tsX = changeNaNvalues(test_set, 'max')
+
 trX3 = changeNaNvalues(dataset, 'mean')
-#tsX = changeNaNvalues(test_set, 'mean')
-#trX4 = changeNaNvalues(training_set, 'interpolate')
-#tsX = changeNaNvalues(test_set, 'interpolate')
 
 #KMeans
 #np.set_printoptions(threshold=np.nan)
